@@ -1,2 +1,2 @@
 # Archiver
-WIP 1st course university project on Huffman Coding
+WIP freshman university project on Huffman Coding
