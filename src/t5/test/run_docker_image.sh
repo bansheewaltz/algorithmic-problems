@@ -23,7 +23,7 @@ else
   image_os="$image"
 fi
 
-container_name="dondarri.${image_os}-${PROJNAME}"
+container_name="dondarri.${image_os}-${PROJ_NAME}"
 # run existing container or build a new one otherwise
 if [ "$(docker ps -a -q -f name=$container_name)" ]; then
   docker start -i $container_name
@@ -43,4 +43,4 @@ else
     bash -c "$command"
 fi
 
-make clean_build
+make clean

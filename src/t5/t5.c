@@ -159,6 +159,11 @@ void display_queue(Queue *queue) {
 }
 #endif
 
+void destroy_queue(Queue *queue) {
+  free(queue->array);
+  free(queue);
+}
+
 TreeNode *build_huffman_tree(uchar alph[], int freq[], int size) {
   TreeNode *left, *right, *top;
 
@@ -190,8 +195,8 @@ TreeNode *build_huffman_tree(uchar alph[], int freq[], int size) {
   }
 
   TreeNode *huffman_tree = dequeue(secondQueue);
-  free(firstQueue);
-  free(secondQueue);
+  destroy_queue(firstQueue);
+  destroy_queue(secondQueue);
 
   return huffman_tree;
 }
@@ -247,9 +252,9 @@ void build_alph_and_freq_arrays(int *dictionary, uchar *symbols, int *freq) {
   }
 }
 
-void print_alph_freq_arrays_lexicographically(uchar *symbols, int *freq,
-                                              FILE *output) {
-  for (int i = 0; symbols[i]; ++i) {
+void print_alph_freq_arrays(uchar symbols[], int freq[], int alph_size,
+                            FILE *output) {
+  for (int i = 0; i < alph_size; ++i) {
     fprintf(output, "%d : %d\n", symbols[i], freq[i]);
   }
 }
@@ -524,7 +529,7 @@ int main() {
   int *freq = (int *)malloc(alph_size * sizeof(int));
   build_alph_and_freq_arrays(dictionary, alph, freq);
 #ifdef DEBUG
-  print_alph_freq_arrays_lexicographically(alph, freq, stdout);
+  print_alph_freq_arrays(alph, freq, alph_size, stdout);
 #endif
   uchar *alph_sorted = array_char_duplicate(alph, alph_size);
   int *freq_sorted = array_int_duplicate(freq, alph_size);
