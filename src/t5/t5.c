@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <errno.h>
+#include <limits.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -19,6 +20,12 @@
 // radix sort options:
 #define REVERSE true
 #define STRAIGHT false
+// prefix code
+#define LEFT_CHILD 0
+#define RIGHT_CHILD 1
+// tree to code
+#define CHILD_NODE '0'
+#define LEAF_NODE '1'
 
 typedef unsigned char uchar;
 
@@ -373,11 +380,11 @@ int *copy_code_array(int src[], int code_len) {
 void scan_codes(TreeNode *root, int code[], int depth, int *codes[],
                 int dictionary[]) {
   if (root->left) {
-    code[depth] = 0;
+    code[depth] = LEFT_CHILD;
     scan_codes(root->left, code, depth + 1, codes, dictionary);
   }
   if (root->right) {
-    code[depth] = 1;
+    code[depth] = RIGHT_CHILD;
     scan_codes(root->right, code, depth + 1, codes, dictionary);
   }
 
@@ -450,12 +457,65 @@ void open_file_descriptors(FILE **input, FILE **output) {
   check_null_pointer(output);
 }
 
+void print_coding_info(TreeNode *tree, int dictionary[], uchar alph[],
+                       int freq[], int alph_size, FILE *output) {
+  int **codes = build_codes_array(tree, dictionary, alph_size);
+  print_codes_lexicographically(alph, codes, alph_size, output);
+  print_coding_stats(freq, codes, alph_size, output);
+
+#ifdef DEBUG
+  print_codes_lexicographically(alph, codes, alph_size, stdout);
+#endif
+
+  for (int i = 0; i < alph_size; ++i) {
+    free(codes[i]);
+  }
+  free(codes);
+}
+
+void print_char_as_binary(uchar symbol, FILE *output) {
+  for (int i = CHAR_BIT - 1; i >= 0; i--) {
+    fprintf(output, "%d", (symbol >> i) & 1 ? 1 : 0);
+  }
+}
+
+void array_int_print(int array[], int len, FILE *output) {
+  for (int i = 0; i < len; ++i) {
+    fprintf(output, "%d", array[i]);
+  }
+}
+
+void preorder_traversal(TreeNode *root, int prefix[], int depth, FILE *output) {
+  if (!is_node_leaf(root)) {
+    putc(CHILD_NODE, output);
+    preorder_traversal(root->left, prefix, depth + 1, output);
+    preorder_traversal(root->right, prefix, depth + 1, output);
+  }
+  if (is_node_leaf(root)) {
+    putc(LEAF_NODE, output);
+    print_char_as_binary(root->symbol, output);
+  }
+}
+
+void print_huffman_tree(TreeNode *tree, FILE *output) {
+  int prefix[MAX_TREE_HEIGHT];
+  int depth = 0;
+
+  preorder_traversal(tree, prefix, depth, output);
+#ifdef DEBUG
+  preorder_traversal(tree, prefix, depth, stdout);
+#endif
+}
+
 int main() {
   FILE *input = NULL;
   FILE *output = NULL;
   open_file_descriptors(&input, &output);
   int dictionary[ALPHABET_SIZE] = {0};
   int alph_size;
+#ifdef DEBUG
+  setbuf(stdout, NULL);
+#endif
 
   build_dictionary(dictionary, input);
   alph_size = get_alphabet_size(dictionary);
@@ -474,18 +534,12 @@ int main() {
   print_sorted_freq_array(freq_sorted, alph_size);
 #endif
   TreeNode *tree = build_huffman_tree(alph_sorted, freq_sorted, alph_size);
-  int **codes = build_codes_array(tree, dictionary, alph_size);
-  print_codes_lexicographically(alph, codes, alph_size, output);
-  print_coding_stats(freq, codes, alph_size, output);
 #ifdef DEBUG
-  print_codes_lexicographically(alph, codes, alph_size, stdout);
+  print_coding_info(tree, dictionary, alph, freq, alph_size, stdout);
 #endif
+  print_huffman_tree(tree, output);
 
   destroy_tree(tree);
-  for (int i = 0; i < alph_size; ++i) {
-    free(codes[i]);
-  }
-  free(codes);
   free(alph);
   free(freq);
   free(alph_sorted);
