@@ -11,15 +11,17 @@
 #include "print_tree.h"
 #endif
 
-#define INPUT_FILE "input.bin"
+#define INPUT_FILE "input.in"
 #define INPUT_READ_MODE "rb"
 #define ALPHABET_SIZE 256
 #define BUFFER_SIZE 4096
-#define MAX_TREE_HEIGHT ALPHABET_SIZE
 // radix sort options
 #define COUNTING_SORT_BASE 10
 #define REVERSE true
 #define STRAIGHT false
+// huffman tree implementation features
+#define MAX_TREE_HEIGHT ALPHABET_SIZE
+#define INTERNAL_NODE_SYMBOL 'x'
 // huffman tree symbol prefix code
 #define LEFT_CHILD 0
 #define RIGHT_CHILD 1
@@ -163,13 +165,32 @@ void destroy_queue(Queue *queue) {
   free(queue);
 }
 
-TreeNode *build_huffman_tree(uchar alph[], int freq[], int size) {
+int calculate_internal_node_weight(TreeNode *left, TreeNode *right) {
+  if (left == NULL && right == NULL) {
+    return 0;
+  }
+  if (left == NULL) {
+    return right->freq;
+  }
+  if (right == NULL) {
+    return left->freq;
+  }
+
+  return left->freq + right->freq;
+}
+
+TreeNode *build_huffman_tree(uchar alph[], int freq[], int alph_size) {
+  if (alph_size == 1) {
+    return create_tree_node(alph[0], freq[0]);
+  }
+
   TreeNode *left, *right, *top;
+  int node_weight;
 
-  Queue *firstQueue = create_queue(size);
-  Queue *secondQueue = create_queue(size);
+  Queue *firstQueue = create_queue(alph_size);
+  Queue *secondQueue = create_queue(alph_size);
 
-  for (int i = 0; i < size; ++i) {
+  for (int i = 0; i < alph_size; ++i) {
     enqueue(firstQueue, create_tree_node(alph[i], freq[i]));
   }
 
@@ -186,8 +207,9 @@ TreeNode *build_huffman_tree(uchar alph[], int freq[], int size) {
   while (!(is_queue_empty(firstQueue) && is_queue_size_one(secondQueue))) {
     right = find_queue_min(firstQueue, secondQueue);
     left = find_queue_min(firstQueue, secondQueue);
+    node_weight = calculate_internal_node_weight(left, right);
 
-    top = create_tree_node('$', left->freq + right->freq);
+    top = create_tree_node(INTERNAL_NODE_SYMBOL, node_weight);
     top->left = left;
     top->right = right;
     enqueue(secondQueue, top);
@@ -489,6 +511,10 @@ void array_int_print(int array[], int len, FILE *output) {
 }
 
 void preorder_traversal(TreeNode *root, int prefix[], int depth, FILE *output) {
+  if (root == NULL) {
+    return;
+  }
+
   if (!is_node_leaf(root)) {
     putc(CHILD_NODE, output);
     preorder_traversal(root->left, prefix, depth + 1, output);
