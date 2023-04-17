@@ -510,6 +510,10 @@ void preorder_traversal(TreeNode *root, int prefix[], int depth, FILE *output) {
 }
 
 void print_huffman_tree_to_text(TreeNode *tree, FILE *output) {
+  if (tree == NULL) {
+    return;
+  }
+
   int prefix[MAX_TREE_HEIGHT];
   int depth = 0;
 
