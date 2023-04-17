@@ -16,14 +16,14 @@
 #define ALPHABET_SIZE 256
 #define BUFFER_SIZE 4096
 #define MAX_TREE_HEIGHT ALPHABET_SIZE
-// radix sort options:
+// radix sort options
 #define COUNTING_SORT_BASE 10
 #define REVERSE true
 #define STRAIGHT false
-// symbol prefix code
+// huffman tree symbol prefix code
 #define LEFT_CHILD 0
 #define RIGHT_CHILD 1
-// tree to text
+// huffman tree to text
 #define CHILD_NODE '0'
 #define LEAF_NODE '1'
 
@@ -251,8 +251,7 @@ void build_alph_and_freq_arrays(int *dictionary, uchar *symbols, int *freq) {
   }
 }
 
-void print_alph_freq_arrays(uchar symbols[], int freq[], int alph_size,
-                            FILE *output) {
+void print_freq_info(uchar symbols[], int freq[], int alph_size, FILE *output) {
   for (int i = 0; i < alph_size; ++i) {
     fprintf(output, "%d : %d\n", symbols[i], freq[i]);
   }
@@ -478,7 +477,7 @@ void print_coding_info(TreeNode *tree, int dictionary[], uchar alph[],
 }
 
 void print_char_as_binary(uchar symbol, FILE *output) {
-  for (int i = CHAR_BIT - 1; i >= 0; i--) {
+  for (int i = CHAR_BIT - 1; i >= 0; --i) {
     fprintf(output, "%d", (symbol >> i) & 1 ? 1 : 0);
   }
 }
@@ -501,7 +500,7 @@ void preorder_traversal(TreeNode *root, int prefix[], int depth, FILE *output) {
   }
 }
 
-void huffman_tree_to_text(TreeNode *tree, FILE *output) {
+void print_huffman_tree_to_text(TreeNode *tree, FILE *output) {
   int prefix[MAX_TREE_HEIGHT];
   int depth = 0;
 
@@ -528,7 +527,7 @@ int main() {
   int *freq = (int *)malloc(alph_size * sizeof(int));
   build_alph_and_freq_arrays(dictionary, alph, freq);
 #ifdef DEBUG
-  print_alph_freq_arrays(alph, freq, alph_size, stdout);
+  print_freq_info(alph, freq, alph_size, stdout);
 #endif
   uchar *alph_sorted = array_char_duplicate(alph, alph_size);
   int *freq_sorted = array_int_duplicate(freq, alph_size);
@@ -541,7 +540,7 @@ int main() {
 #ifdef DEBUG
   print_coding_info(tree, dictionary, alph, freq, alph_size, stdout);
 #endif
-  huffman_tree_to_text(tree, output);
+  print_huffman_tree_to_text(tree, output);
 
   destroy_tree(tree);
   free(alph);
