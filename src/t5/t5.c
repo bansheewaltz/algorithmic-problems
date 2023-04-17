@@ -11,7 +11,7 @@
 #include "print_tree.h"
 #endif
 
-#define INPUT_FILE "input.in"
+#define INPUT_FILE "input.bin"
 #define INPUT_READ_MODE "rb"
 #define ALPHABET_SIZE 256
 #define BUFFER_SIZE 4096
@@ -165,28 +165,12 @@ void destroy_queue(Queue *queue) {
   free(queue);
 }
 
-int calculate_internal_node_weight(TreeNode *left, TreeNode *right) {
-  if (left == NULL && right == NULL) {
-    return 0;
-  }
-  if (left == NULL) {
-    return right->freq;
-  }
-  if (right == NULL) {
-    return left->freq;
-  }
-
-  return left->freq + right->freq;
-}
-
 TreeNode *build_huffman_tree(uchar alph[], int freq[], int alph_size) {
   if (alph_size == 1) {
     return create_tree_node(alph[0], freq[0]);
   }
 
   TreeNode *left, *right, *top;
-  int node_weight;
-
   Queue *firstQueue = create_queue(alph_size);
   Queue *secondQueue = create_queue(alph_size);
 
@@ -207,9 +191,8 @@ TreeNode *build_huffman_tree(uchar alph[], int freq[], int alph_size) {
   while (!(is_queue_empty(firstQueue) && is_queue_size_one(secondQueue))) {
     right = find_queue_min(firstQueue, secondQueue);
     left = find_queue_min(firstQueue, secondQueue);
-    node_weight = calculate_internal_node_weight(left, right);
 
-    top = create_tree_node(INTERNAL_NODE_SYMBOL, node_weight);
+    top = create_tree_node(INTERNAL_NODE_SYMBOL, left->freq + right->freq);
     top->left = left;
     top->right = right;
     enqueue(secondQueue, top);
