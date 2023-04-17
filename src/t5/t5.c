@@ -15,15 +15,15 @@
 #define INPUT_READ_MODE "rb"
 #define ALPHABET_SIZE 256
 #define BUFFER_SIZE 4096
-#define MAX_TREE_HEIGHT 50
-#define COUNTING_SORT_BASE 10
+#define MAX_TREE_HEIGHT ALPHABET_SIZE
 // radix sort options:
+#define COUNTING_SORT_BASE 10
 #define REVERSE true
 #define STRAIGHT false
-// prefix code
+// symbol prefix code
 #define LEFT_CHILD 0
 #define RIGHT_CHILD 1
-// tree to code
+// tree to text
 #define CHILD_NODE '0'
 #define LEAF_NODE '1'
 
@@ -45,8 +45,7 @@ struct Queue {
 
 void check_null_pointer(void *p) {
   if (p == NULL) {
-    // fprintf(stderr, "Archiver error: %s\n", strerror(errno));
-    perror("Archiver error: ");
+    perror("archiver error");
     exit(1);
   }
 }
@@ -275,8 +274,8 @@ void counting_sort_paired(uchar alph[], int freq[], int size, int place,
   assert(size > 0);
   int max_digit = COUNTING_SORT_BASE - 1;
   int count[COUNTING_SORT_BASE] = {0};
-  int freq_output[size];
-  int alph_output[size];
+  int *freq_output = (int *)malloc(sizeof(int) * size);
+  uchar *alph_output = (uchar *)malloc(sizeof(uchar) * size);
 
   // Calculate count of elements
   for (int i = 0; i < size; ++i) {
@@ -458,8 +457,8 @@ void open_file_descriptors(FILE **input, FILE **output) {
   *input = fopen(INPUT_FILE, INPUT_READ_MODE);
   *output = fopen("output.txt", "w");
 
-  check_null_pointer(input);
-  check_null_pointer(output);
+  check_null_pointer(*input);
+  check_null_pointer(*output);
 }
 
 void print_coding_info(TreeNode *tree, int dictionary[], uchar alph[],
@@ -502,7 +501,7 @@ void preorder_traversal(TreeNode *root, int prefix[], int depth, FILE *output) {
   }
 }
 
-void print_huffman_tree(TreeNode *tree, FILE *output) {
+void huffman_tree_to_text(TreeNode *tree, FILE *output) {
   int prefix[MAX_TREE_HEIGHT];
   int depth = 0;
 
@@ -542,7 +541,7 @@ int main() {
 #ifdef DEBUG
   print_coding_info(tree, dictionary, alph, freq, alph_size, stdout);
 #endif
-  print_huffman_tree(tree, output);
+  huffman_tree_to_text(tree, output);
 
   destroy_tree(tree);
   free(alph);

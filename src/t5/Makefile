@@ -11,7 +11,7 @@ CC := gcc
 WFLAGS := -Wall -Werror -Wextra
 CFLAGS := $(WFLAGS)
 LDLIBS := -lm
-MEMFLAGS := --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes
+MEMFLAGS := --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --verbose
 # macro
 RM := rm -rf
 export
@@ -25,10 +25,12 @@ else
 endif
 d:
 	$(CC) -g -DDEBUG $(CFLAGS) $(LAST_MODIFIED) $(LDLIBS) && ./a.out
+container: clean
+	bash test/run_docker_image.sh
 valgrind:
 	valgrind $(MEMFLAGS) ./a.out
-container:
-	bash test/run_docker_image.sh
+asan:
+	$(CC) -g $(CFLAGS) $(LAST_MODIFIED) -fsanitize=address -fsanitize=leak -fsanitize=undefined $(LDLIBS) && ./a.out
 clean:
 	$(RM) *.out
 	$(RM) *.dSYM
