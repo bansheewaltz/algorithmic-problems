@@ -26,12 +26,18 @@
 // huffman tree implementation features
 #define MAX_TREE_HEIGHT ALPHABET_SIZE
 #define INTERNAL_NODE_SYMBOL 'x'
-// huffman tree symbol prefix code
+// huffman tree prefix code symbols
 #define LEFT_CHILD 0
 #define RIGHT_CHILD 1
-// huffman tree to text
+// huffman tree serialization symbols
 #define CHILD_NODE 0
 #define LEAF_NODE 1
+// bit-wise writing options
+#define FLUSH_BYTE true
+#define CONTINUE false
+// bit-wise printing options
+#define NEW_LINE true
+#define SAME_LINE false
 
 typedef unsigned char uchar;
 
@@ -485,10 +491,17 @@ void print_coding_info(TreeNode *tree, int dictionary[], uchar alph[],
   free(codes);
 }
 
-void print_char_as_binary(uchar symbol, FILE *output) {
+void print_byte_in_binary(uchar byte, bool formatting, FILE *output) {
   for (int i = CHAR_BIT - 1; i >= 0; --i) {
-    fprintf(output, "%d", (symbol >> i) & 1 ? 1 : 0);
+    fprintf(output, "%d", (byte >> i) & 1 ? 1 : 0);
   }
+  if (formatting == NEW_LINE) {
+    fprintf(output, "\n");
+  }
+}
+
+void print_char_in_binary(uchar symbol, bool formatting, FILE *output) {
+  print_byte_in_binary(symbol, formatting, output);
 }
 
 void array_int_print(int array[], int len, FILE *output) {
@@ -516,7 +529,7 @@ void preorder_traversal_printing(TreeNode *root, FILE *output) {
   }
   if (is_node_leaf(root)) {
     putc(bit_to_char(LEAF_NODE), output);
-    print_char_as_binary(root->symbol, output);
+    print_char_in_binary(root->symbol, SAME_LINE, output);
   }
 }
 
@@ -527,25 +540,60 @@ void print_huffman_tree_to_text(TreeNode *tree, FILE *output) {
 
   preorder_traversal_printing(tree, output);
 #ifdef DEBUG
-  preorder_traversal_printing(tree, stdout);
+  fprintf(output, "\n");
 #endif
 }
 
 void set_bit(uchar *byte, int bit, int position) {
-  *byte |= bit << position;
+  *byte |= bit << (CHAR_BIT - position);
 }
 
-void fwrite_buffered(int bit, FILE *output) {
-  static int bit_position = 0;
+void reset_byte(uchar *byte, int *bit_position) {
+  *byte = 0b00000000;
+  *bit_position = 1;
+}
+
+void writebit_buffered(int bit, bool flush_flag, FILE *output) {
+  static int bit_position = 1;  // in byte, from left
   static uchar byte = 0b00000000;
 
-  set_bit(&byte, bit, bit_position);
-  ++bit_position;
-
-  if (bit_position + 1 % CHAR_BIT == 0) {
+  if (flush_flag == FLUSH_BYTE) {
+    if (bit_position == 1) {
+      return;
+    }
+    for (; bit_position < CHAR_BIT; ++bit_position) {
+      set_bit(&byte, bit, bit_position);
+#ifdef DEBUG
+      print_byte_in_binary(byte, NEW_LINE, stdout);
+      if (bit_position == 8) {
+        printf("flush\n");
+      }
+#endif
+    }
     fwrite(&byte, sizeof(uchar), 1, output);
-    byte = 0b00000000;
-    bit_position = 0;
+    reset_byte(&byte, &bit_position);
+  }
+
+  if (flush_flag == CONTINUE) {
+    set_bit(&byte, bit, bit_position);
+#ifdef DEBUG
+    print_byte_in_binary(byte, NEW_LINE, stdout);
+    if (bit_position == 8) {
+      printf("flush\n");
+    }
+#endif
+    if (bit_position % CHAR_BIT == 0) {
+      fwrite(&byte, sizeof(uchar), 1, output);
+      reset_byte(&byte, &bit_position);
+    } else {
+      ++bit_position;
+    }
+  }
+}
+
+void serialize_char(uchar symbol, FILE *output) {
+  for (int i = CHAR_BIT - 1; i >= 0; --i) {
+    writebit_buffered((symbol >> i) & 1 ? 1 : 0, CONTINUE, output);
   }
 }
 
@@ -555,13 +603,13 @@ void preorder_traversal_serialization(TreeNode *root, FILE *output) {
   }
 
   if (!is_node_leaf(root)) {
-    fwrite_buffered(CHILD_NODE, output);
+    writebit_buffered(CHILD_NODE, CONTINUE, output);
     preorder_traversal_serialization(root->left, output);
     preorder_traversal_serialization(root->right, output);
   }
   if (is_node_leaf(root)) {
-    fwrite_buffered(LEAF_NODE, output);
-    print_char_as_binary(root->symbol, output);
+    writebit_buffered(LEAF_NODE, CONTINUE, output);
+    serialize_char(root->symbol, output);
   }
 }
 
@@ -573,6 +621,7 @@ void serialize_huffman_tree(TreeNode *tree, int alph_size, FILE *output) {
   uchar alph_size_as_byte = (uchar)alph_size;
   fwrite(&alph_size_as_byte, sizeof(uchar), 1, output);
   preorder_traversal_serialization(tree, output);
+  writebit_buffered(0, FLUSH_BYTE, output);
 }
 
 int main() {
@@ -604,8 +653,8 @@ int main() {
   TreeNode *tree = build_huffman_tree(alph_sorted, freq_sorted, alph_size);
 #ifdef DEBUG
   print_coding_info(tree, dictionary, alph, freq, alph_size, stdout);
+  print_huffman_tree_to_text(tree, stdout);
 #endif
-  print_huffman_tree_to_text(tree, output);
   serialize_huffman_tree(tree, alph_size, output);
 
   destroy_tree(tree);
