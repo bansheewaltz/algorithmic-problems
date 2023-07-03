@@ -1,2 +1,1 @@
-# Huffman coding archiver
-WIP freshman university project on Huffman Coding
+[university contest platform](https://olympic.nsu.ru/nsuts-new/olympiads)
