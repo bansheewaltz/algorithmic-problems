@@ -5,19 +5,8 @@
       "name": "(lldb) Launch current file",
       "type": "lldb",
       "request": "launch",
-      "program": "${fileDirname}/${fileBasenameNoExtension}.out",
+      "program": "${fileDirname}/build/${fileBasenameNoExtension}.out",
       "args": [],
-      "cwd": "${fileDirname}",
-      "preLaunchTask": "build debug"
-    },
-    {
-      "name": "(lldb) Launch current file with arg",
-      "type": "lldb",
-      "request": "launch",
-      "program": "${fileDirname}/${fileBasenameNoExtension}.out",
-      "args": [
-        "1.out"
-      ],
       "cwd": "${fileDirname}",
       "preLaunchTask": "build debug"
     },
