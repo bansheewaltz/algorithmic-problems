@@ -1,4 +1,9 @@
+build
 test
 *.dSYM
 *.out
 */**/Makefile
+in.txt
+out.txt
+
+.DS_Store
