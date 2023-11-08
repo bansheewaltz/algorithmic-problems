@@ -9,7 +9,7 @@
     {
       "type": "shell",
       "label": "build debug",
-      "command": "mkdir -p build && g++ -DLOCAL -g ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      "command": "mkdir -p build && g++ -DLOCAL -g -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
       },
@@ -33,6 +33,22 @@
       "group": {
         "kind": "test",
         "isDefault": true
+      },
+      "dependsOn": [
+        "build debug"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
+      "label": "run",
+      "command": "build/${fileBasenameNoExtension}.out",
+      "options": {
+        "cwd": "${fileDirname}"
       },
       "dependsOn": [
         "build debug"

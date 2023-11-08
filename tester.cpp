@@ -12,12 +12,14 @@ int main(int argc, char *argv[]) {
   std::string bin = argv[1];
 
   std::string tests;
-  if (argc == 2)
-    tests = bin.substr(0, bin.find_last_of('.')) + ".test";
-  else
+  int file_s = bin.find_last_of("/") + 1;
+  int file_e = bin.find_last_of(".");
+  if (argc == 2) {
+    tests = bin.substr(file_s, file_e - file_s) + ".test";
+  } else
     tests = argv[2];
 
-  // std::cout << bin << " " << tests;
+  // std::cout << bin << " " << tests << "\n";
 
   if (!freopen(tests.c_str(), "r", stdin)) {
     std::cerr << "there is no such file" << std::endl;
@@ -35,7 +37,7 @@ int main(int argc, char *argv[]) {
   std::stringstream buffer;
   while (std::getline(std::cin, line)) {
     line_n++;
-    if (line[0] == '=') {
+    if (line.compare("===") == 0) {
       test_n++;
       std::ofstream ofs(in);
       ofs << buffer.str();
@@ -44,7 +46,7 @@ int main(int argc, char *argv[]) {
       buffer.str("");
       continue;
     }
-    if (line[0] == '-') {
+    if (line.compare("---") == 0) {
     check_res:
       std::ifstream ifs(out);
       std::stringstream ans;
