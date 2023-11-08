@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
   unsigned int last_test_line_n = 1;
   std::string in = "in.txt";
   std::string out = "out.txt";
-  std::string syscall = "./" + bin + " < " + in + " > " + out;
+  std::string syscall = "./" + bin;
 
   std::string line;
   std::stringstream buffer;
