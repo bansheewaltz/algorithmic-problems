@@ -28,17 +28,14 @@ void solve() {
   ra < rb ? xsm = xa, ysm = ya, rsm = ra : (xsm = xb, ysm = yb, rsm = rb);
   ra > rb ? xbg = xa, ybg = ya, rbg = ra : (xbg = xb, ybg = yb, rbg = rb);
 
-  double sc = rsm / rbg;
-  double xarc = xbg * sc;
-  double yarc = ybg * sc;
+  double anga = atan2(xa, ya);
+  double angb = atan2(xb, yb);
 
-  double d;
-  if (ra == rb)
-    d = sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb));
-  else
-    d = sqrt((xarc - xsm) * (xarc - xsm) + (yarc - ysm) * (yarc - ysm));
+  double angab_1 = abs(anga - angb);
+  double angab_2 = 2 * M_PI - angab_1;
+  double angab_sm = angab_1 < angab_2 ? angab_1 : angab_2;
+  double arc = rsm * angab_sm;
 
-  double arc = rsm * acos(1 - (d * d) / (2 * rsm * rsm));
   double arcpath = arc + rbg - rsm;
   double cenpath = ra + rb;
   double shortest = arcpath < cenpath ? arcpath : cenpath;
