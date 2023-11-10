@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -14,36 +15,31 @@ int main() {
   cout << "\n";
 }
 
-int r, c;
-vector<vector<int>> f;
-
 void solve() {
-  cin >> r;
-  cin >> c;
-  f = vector<vector<int>>(r, vector<int>(c));
+  int r, c;
+  cin >> r >> c;
+  vector<vector<int>> f(r, vector<int>(c));
 
-  for (int i = 0; i < r; i++)
-    for (int j = 0; j < c; j++)
-      cin >> f[i][j];
-
-  int ms = 0;
-  int smaller = r < c ? r : c;
+  int max = 0;
   for (int i = 0; i < r; i++)
     for (int j = 0; j < c; j++) {
+      cin >> f[i][j];
+      if (f[i][j] == 1) max = 1;
+    }
+
+  for (int i = 1; i < r; i++) {
+    for (int j = 1; j < c; j++) {
       if (f[i][j]) {
-        int cur = 1;
-        if (!ms)
-          ms = 1;
-        for (int k = 1; k < smaller; k++) {
-          if (i + k < r && j + k < c && f[i][j + k]&&)
-            cur++;
-          else {
-            j += k;
-            break;
-          }
+        int l = f[i][j - 1];
+        int t = f[i - 1][j];
+        int d = f[i - 1][j - 1];
+        if (l && t && d) {
+          f[i][j] = min({l, t, d}) + 1;
+          if (f[i][j] > max) max = f[i][j];
         }
-        ms < cur ? ms = cur : 0;
       }
     }
-  cout << ms;
+  }
+
+  cout << max;
 }
