@@ -25,7 +25,7 @@
     },
     {
       "type": "shell",
-      "label": "test",
+      "label": "build and test",
       "command": "./test build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
@@ -37,6 +37,23 @@
       "dependsOn": [
         "build debug"
       ],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
+      "label": "test",
+      "command": "./test build/${fileBasenameNoExtension}.out",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
       "presentation": {
         "reveal": "always",
         "focus": true,
