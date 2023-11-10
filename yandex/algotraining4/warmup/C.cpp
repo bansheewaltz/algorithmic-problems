@@ -25,8 +25,8 @@ void solve() {
 
   double xsm, xbg, ysm, ybg, rsm, rbg;
 
-  ra < rb ? xsm = xa, ysm = ya, rsm = ra : (xsm = xb, ysm = yb, rsm = rb);
-  ra > rb ? xbg = xa, ybg = ya, rbg = ra : (xbg = xb, ybg = yb, rbg = rb);
+  ra < rb ? rsm = ra : rsm = rb;
+  ra > rb ? rbg = ra : rbg = rb;
 
   double anga = atan2(xa, ya);
   double angb = atan2(xb, yb);
