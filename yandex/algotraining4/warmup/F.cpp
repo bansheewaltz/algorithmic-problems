@@ -1,13 +1,14 @@
 #include <cmath>
+#include <cstdint>
 #include <iomanip>
 #include <iostream>
 #include <vector>
 using namespace std;
 typedef long long ll;
-
+// #define int uint64_t;
 void solve();
 
-int main() {
+int32_t main() {
 #ifdef LOCAL
   freopen("in.txt", "r", stdin);
   freopen("out.txt", "w", stdout);
@@ -17,38 +18,31 @@ int main() {
 }
 
 void solve() {
-  ll n, k;
-  vector<ll> f;
+  uint64_t n, k;
+  vector<uint64_t> f;
   cin >> k >> n;
   f.resize(n + 1);
-  ll last_fl = 0;
-  for (ll i = 1; i < n + 1; i++) {
+  uint64_t last_fl = 0;
+  for (uint64_t i = 1; i < n + 1; i++) {
     cin >> f[i];
     if (f[i]) last_fl = i;
   }
 
-  ll time = 0;
-  /* start from top */
-  ll i = last_fl;
-  while (i > 0) {
-    ll free = k;
-    time += i * 2;
-    /* go down and stop while there is a free space */
-    while (free && free >= f[i] && i > 0) {
-      if (f[i]) {
-        free -= f[i];
-        f[i] = 0;
-      }
-      while (!f[i] && i > 0) i--;
+  uint64_t time = 0;
+  uint64_t free = k;
+  for (uint64_t i = last_fl; i > 0; i--) {
+    while (!f[i] && i > 1) i--;
+    if (free == k) time += i * 2;
+    if (f[i] > free) {
+      f[i] -= free;
+      uint64_t reps = f[i] / k;
+      if (f[i] - reps * k) reps++;
+      time += reps * i * 2;
+      free = k - f[i] % k;
+    } else {
+      free -= f[i];
     }
-    /* go down */
-    if (i == 0 || !free) continue;
-    /* return several times */
-    f[i] -= free;
-    ll times = f[i] / k;
-    f[i] -= k * times;
-    time += i * 2 * times;
-    if (!f[i] && i > 0) i--;
+    f[i] = 0;
   }
   cout << time;
 }
