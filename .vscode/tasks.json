@@ -40,7 +40,6 @@
       "presentation": {
         "reveal": "always",
         "focus": true,
-        "showReuseMessage": false
       }
     },
     {
@@ -57,7 +56,6 @@
       "presentation": {
         "reveal": "always",
         "focus": true,
-        "showReuseMessage": false
       }
     },
     {
