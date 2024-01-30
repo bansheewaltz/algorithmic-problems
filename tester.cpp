@@ -6,8 +6,7 @@
 std::string string_insert_tab(std::string s);
 
 int main(int argc, char *argv[]) {
-  if (argc == 1)
-    return 1;
+  if (argc == 1) return 1;
 
   std::string bin = argv[1];
 
@@ -66,8 +65,7 @@ int main(int argc, char *argv[]) {
     }
     buffer << line << '\n';
   }
-  if (buffer.tellp() != std::streampos(0))
-    goto check_res;
+  if (buffer.tellp() != std::streampos(0)) goto check_res;
 }
 
 std::string string_insert_tab(std::string s) {
@@ -77,8 +75,7 @@ std::string string_insert_tab(std::string s) {
   cstr[j++] = '\t';
   for (int i = 0; i < s.size(); i++, j++) {
     cstr[j] = s[i];
-    if (s[i] == '\n' && i != s.size() - 1)
-      cstr[++j] = '\t';
+    if (s[i] == '\n' && i != s.size() - 1) cstr[++j] = '\t';
   }
   std::string res(cstr);
   free(cstr);
