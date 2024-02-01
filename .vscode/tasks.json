@@ -2,8 +2,25 @@
   "tasks": [
     {
       "type": "shell",
-      "label": "build debug",
-      "command": "mkdir -p build && clang++ -DLOCAL -g -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      "label": "debug build",
+      "command": "mkdir -p build && clang++ -DDEBUGGING -g -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "silent",
+        "focus": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
+      "label": "test build",
+      "command": "mkdir -p build && clang++ -DLOCAL_TESTING -g -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
       },
@@ -29,7 +46,7 @@
         "isDefault": true
       },
       "dependsOn": [
-        "build debug"
+        "test build"
       ],
       "presentation": {
         "reveal": "always",
@@ -52,22 +69,6 @@
         "focus": true
       }
     },
-    {
-      "type": "shell",
-      "label": "run",
-      "command": "build/${fileBasenameNoExtension}.out",
-      "options": {
-        "cwd": "${fileDirname}"
-      },
-      "dependsOn": [
-        "build debug"
-      ],
-      "presentation": {
-        "reveal": "always",
-        "focus": true,
-        "showReuseMessage": false
-      }
-    }
   ],
   "version": "2.0.0"
 }
