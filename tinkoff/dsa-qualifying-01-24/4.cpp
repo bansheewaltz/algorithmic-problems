@@ -42,9 +42,11 @@ void solve() {
 
 int main() {
 #ifdef LOCAL_TESTING
-  cout << unitbuf;
   freopen("in.txt", "r", stdin);
   freopen("out.txt", "w", stdout);
+#elif DEBUGGING
+  freopen("in.txt", "r", stdin);
+  cout << unitbuf;
 #endif
   solve();
 }
