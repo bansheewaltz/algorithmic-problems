@@ -1,0 +1,31 @@
+test 1
+  in:
+      2
+      abcccca
+      babb
+  out:
+      11   
+
+
+test 2
+  in:
+      5
+      aaa
+      aba
+      ccccc
+      bbbbbbbb
+      bbbb   
+  out:
+      15
+
+
+test 3
+  in:
+      5
+      babccba
+      abcca
+      ababaaaabbbbcc
+      abcaaaccbb
+      ababbbba
+  out:
+      12
