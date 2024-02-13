@@ -2,6 +2,23 @@
   "tasks": [
     {
       "type": "shell",
+      "label": "build",
+      "command": "mkdir -p build && clang++ -O2 -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "silent",
+        "focus": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
       "label": "debug build",
       "command": "mkdir -p build && clang++ -DDEBUGGING -g -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
