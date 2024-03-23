@@ -2,20 +2,27 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "(lldb) debug current file",
+      "name": "lldb",
       "type": "lldb",
       "request": "launch",
       "program": "${fileDirname}/build/${fileBasenameNoExtension}.out",
-      "args": [],
       "cwd": "${fileDirname}",
       "preLaunchTask": "debug build"
     },
+    // {
+    //   "name": "(lldb) launch current file",
+    //   "type": "lldb",
+    //   "request": "launch",
+    //   "program": "${fileDirname}/build/${fileBasenameNoExtension}.out",
+    //   "args": [],
+    //   "cwd": "${fileDirname}",
+    // },
     {
-      "name": "(lldb) launch current file",
-      "type": "lldb",
+      "name": "debugpy",
+      "type": "debugpy",
       "request": "launch",
-      "program": "${fileDirname}/build/${fileBasenameNoExtension}.out",
-      "args": [],
+      "program": "${file}",
+      "args": ["<", "in.txt"],
       "cwd": "${fileDirname}",
     },
   ]

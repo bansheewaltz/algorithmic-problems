@@ -2,6 +2,23 @@
   "tasks": [
     {
       "type": "shell",
+      "label": "run python",
+      "command": "python3 ${file}",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": "**.py"
+      },
+      "presentation": {
+        "reveal": "silent",
+        "focus": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
       "label": "build",
       "command": "mkdir -p build && clang++ -O2 -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
@@ -9,7 +26,7 @@
       },
       "group": {
         "kind": "build",
-        "isDefault": true
+        "isDefault": "**.cpp"
       },
       "presentation": {
         "reveal": "silent",
@@ -29,7 +46,7 @@
       ],
       "group": {
         "kind": "test",
-        "isDefault": true
+        "isDefault": "**.cpp"
       },
       "presentation": {
         "reveal": "silent",
@@ -46,7 +63,7 @@
       },
       "group": {
         "kind": "build",
-        "isDefault": true
+        "isDefault": "**.cpp"
       },
       "presentation": {
         "reveal": "silent",
@@ -57,15 +74,13 @@
     {
       "type": "shell",
       "label": "test build",
-      // "command": "mkdir -p build && clang++ -DLOCAL_TESTING -g -Wall -Wextra -pedantic-errors -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "command": "mkdir -p build && clang++ -DLOCAL_TESTING -g -Wall -Wextra -pedantic -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
-      // "command": "mkdir -p build && clang++ -DLOCAL_TESTING -g -Wall -Wextra -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
       },
       "group": {
         "kind": "build",
-        "isDefault": true
+        "isDefault": "**.cpp"
       },
       "presentation": {
         "reveal": "silent",
@@ -82,7 +97,7 @@
       },
       "group": {
         "kind": "test",
-        "isDefault": true
+        "isDefault": "**.cpp"
       },
       "dependsOn": [
         "test build"
@@ -94,14 +109,33 @@
     },
     {
       "type": "shell",
-      "label": "test",
+      "label": "test cpp",
       "command": "./test build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
       },
       "group": {
         "kind": "test",
-        "isDefault": true
+        "isDefault": "**.cpp"
+      },
+      "presentation": {
+        "reveal": "always",
+        "focus": true
+      }
+    },
+    {
+      "type": "shell",
+      "label": "test py",
+      "command": "./test ${fileBasename}",
+      "options": {
+        "env": {
+          "LOCAL_TESTING": "1"
+        },
+        "cwd": "${fileDirname}"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": "**.py"
       },
       "presentation": {
         "reveal": "always",
