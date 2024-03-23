@@ -2,13 +2,21 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "(lldb) Launch current file",
+      "name": "(lldb) debug current file",
       "type": "lldb",
       "request": "launch",
       "program": "${fileDirname}/build/${fileBasenameNoExtension}.out",
       "args": [],
       "cwd": "${fileDirname}",
       "preLaunchTask": "debug build"
+    },
+    {
+      "name": "(lldb) launch current file",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${fileDirname}/build/${fileBasenameNoExtension}.out",
+      "args": [],
+      "cwd": "${fileDirname}",
     },
   ]
 }

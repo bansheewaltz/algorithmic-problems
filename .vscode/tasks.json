@@ -19,6 +19,26 @@
     },
     {
       "type": "shell",
+      "label": "build and run",
+      "command": "build/${fileBasenameNoExtension}.out",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "dependsOn": [
+        "build"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "silent",
+        "focus": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
       "label": "debug build",
       "command": "mkdir -p build && clang++ -DDEBUGGING -g -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
@@ -37,7 +57,9 @@
     {
       "type": "shell",
       "label": "test build",
-      "command": "mkdir -p build && clang++ -DLOCAL_TESTING -g -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      // "command": "mkdir -p build && clang++ -DLOCAL_TESTING -g -Wall -Wextra -pedantic-errors -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      "command": "mkdir -p build && clang++ -DLOCAL_TESTING -g -Wall -Wextra -pedantic -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      // "command": "mkdir -p build && clang++ -DLOCAL_TESTING -g -Wall -Wextra -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
       },
