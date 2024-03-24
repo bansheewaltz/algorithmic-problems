@@ -74,7 +74,7 @@
     {
       "type": "shell",
       "label": "test build",
-      "command": "mkdir -p build && clang++ -DLOCAL_TESTING -g -Wall -Wextra -pedantic -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      "command": "mkdir -p build && clang++ -g -Wall -Wextra -pedantic -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
       },
@@ -128,9 +128,6 @@
       "label": "test py",
       "command": "./test ${fileBasename}",
       "options": {
-        "env": {
-          "LOCAL_TESTING": "1"
-        },
         "cwd": "${fileDirname}"
       },
       "group": {
@@ -139,7 +136,7 @@
       },
       "presentation": {
         "reveal": "always",
-        "focus": true
+        "focus": false
       }
     },
   ],
