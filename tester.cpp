@@ -11,10 +11,13 @@ int main(int argc, char *argv[]) {
   std::string bin = argv[1];
 
   std::string tests;
-  int file_s = bin.find_last_of("/") + 1;
-  int file_e = bin.find_last_of(".");
+  int filename_begin = bin.find_last_of("/") + 1;
+  int filename_end = bin.find_last_of(".");
+  int hyphen_pos = bin.find_last_of("-");
+  int substr_len = filename_end - filename_begin;
+  if (hyphen_pos > filename_begin) substr_len = hyphen_pos - filename_begin;
   if (argc == 2) {
-    tests = bin.substr(file_s, file_e - file_s) + ".test";
+    tests = bin.substr(filename_begin, substr_len) + ".test";
   } else
     tests = argv[2];
 
