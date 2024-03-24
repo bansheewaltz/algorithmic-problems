@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
 using std::string;
 using std::cout;
 
@@ -13,19 +12,18 @@ int main(int argc, char *argv[]) {
   if (argc == 1) return 1;
 
   string binpath = argv[1];
-  int binname_beg = binpath.find_last_of("/") + 1;
-  int binname_end = binpath.find_last_of(".");
-  int hyphen_pos = binpath.find_last_of("-");
-  int binname_len = binname_end - binname_beg;
-  if (hyphen_pos > binname_beg) 
-    binname_len = hyphen_pos - binname_beg;
-  
   string testspath;
-  if (argc == 2)
-    testspath = binpath.substr(binname_beg, binname_len) + ".test";
-  else
+  if (argc == 3)
     testspath = argv[2];
-
+  else {
+    int binname_beg_pos = binpath.find_last_of("/") + 1;
+    int binname_end_pos = binpath.find_last_of(".");
+    int hyphen_pos = binpath.find_last_of("-");
+    if (hyphen_pos > binname_beg_pos) 
+      binname_end_pos = hyphen_pos;
+    int binname_len = binname_end_pos - binname_beg_pos;
+    testspath = binpath.substr(binname_beg_pos, binname_len) + ".test";
+  }
   // std::cout << binpath << " " << testspath << "\n";
 
   if (!freopen(testspath.c_str(), "r", stdin)) {
