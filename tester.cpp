@@ -32,11 +32,12 @@ string rstripws(string line) {
 }
 
 string add_indentation(string s) {
-  string fmt = s;
-  for (size_t i = 0; i < fmt.size() - 1; i++) {
-    if (fmt[i] == '\n') i++;
-    fmt.insert(i, "\t");
-  }
+  string fmt = "\t" + s;
+  for (size_t i = 1; i < fmt.size() - 1; i++)
+    if (fmt[i] == '\n') {
+      i++;
+      fmt.insert(i, "\t");
+    }
   return fmt;
 }
 
