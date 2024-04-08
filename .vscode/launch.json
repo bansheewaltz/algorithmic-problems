@@ -6,10 +6,7 @@
       "type": "lldb",
       "request": "launch",
       "program": "${fileDirname}/build/${fileBasenameNoExtension}.out",
-      "args": [
-        "<",
-        "in.txt"
-      ],
+      "stdio": "in.txt",
       "cwd": "${fileDirname}",
       "preLaunchTask": "debug build",
     },
