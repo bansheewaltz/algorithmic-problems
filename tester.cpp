@@ -107,9 +107,9 @@ int main(int argc, char *argv[]) {
       std::cerr << "res:\n" << std::quoted(keep_escapes(ans.str())) << '\n';
 #endif
       if (buffer.str() == ans.str())
-        cout << test_n << ". OK" << std::endl;
+        cout << test_n << ".\033[1;42m PASS \033[0m" << std::endl;
       else {
-        cout << test_n << ". FAIL";
+        cout << test_n << ".\033[1;41m FAIL \033[0m";
         cout << "\t" << tests_path << ":" << last_test_pointer << std::endl;
         cout << "=======\n";
         cout << add_indentation(ans.str());
