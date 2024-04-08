@@ -1,5 +1,16 @@
 {
-  "editor.formatOnSave": false,
-  "C_Cpp.formatting": "disabled",
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    }
+  },
+  "[cpp]": {
+    "editor.formatOnSave": false,
+    "files.insertFinalNewline": true
+  },
   "C_Cpp.default.cppStandard": "c++20",
+  "python.analysis.typeCheckingMode": "basic",
+  "files.insertFinalNewline": false
 }
