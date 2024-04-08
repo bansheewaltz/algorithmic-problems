@@ -95,6 +95,7 @@
         "test build",
         "test cpp"
       ],
+      "dependsOrder": "sequence",
     },
     {
       "type": "shell",
