@@ -60,7 +60,7 @@ string add_indentation(string s) {
       i++;
       fmt.insert(i, "\t");
     }
-  return fmt;
+  return rstripws(fmt) + '\n';
 }
 
 const string test_in = "in.txt";
@@ -123,9 +123,9 @@ int main(int argc, char *argv[]) {
              << FGGREY << test_time.count() << "ms" << COLRESET << std::endl;
       else {
         cout << test_n << "." << BGR << " FAIL " << COLRESET << " " 
-             << FGGREY << test_time.count() << "ms" << COLRESET << std::endl;
-        cout << "\t" << tests_path << ":" << last_test_pointer << std::endl;
-        cout << "=======\n";
+             << FGGREY << test_time.count() << "ms" << COLRESET << " ";
+        cout << tests_path << ":" << last_test_pointer << std::endl;
+        cout << "========\n";
         cout << add_indentation(ans.str());
       } 
       buffer.str("");
