@@ -31,6 +31,18 @@ string rstripws(string line) {
   return std::string(line.begin(), end_it.base());
 }
 
+string keep_escapes(std::string_view line) {
+  string fmt = line.data();
+  for (size_t i = 0; i < fmt.size(); i++) {
+    char ch = fmt[i];
+    switch (ch) {
+      case '\n': fmt.replace(i, 2, "\\n"); i++; break;
+      case '\t': fmt.replace(i, 2, "\\n"); i++; break;
+    }
+  }
+  return fmt;
+}
+
 string add_indentation(string s) {
   string fmt = "\t" + s;
   for (size_t i = 1; i < fmt.size() - 1; i++)
