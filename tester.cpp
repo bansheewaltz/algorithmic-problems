@@ -100,7 +100,8 @@ int main(int argc, char *argv[]) {
     if (line == key_input || std::cin.eof()) {
       std::ifstream res_ifs{test_out};
       std::stringstream ans;
-      ans << res_ifs.rdbuf();
+      string resline;
+      while (std::getline(res_ifs, resline)) ans << rstripws(resline) << "\n";
       using std::cout;
 #ifdef DEBUGGING
       std::cerr << "ref:\n" << std::quoted(keep_escapes(buffer.str())) << '\n';
