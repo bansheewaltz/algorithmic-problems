@@ -6,23 +6,22 @@
       "type": "lldb",
       "request": "launch",
       "program": "${fileDirname}/build/${fileBasenameNoExtension}.out",
+      "args": [
+        "<",
+        "in.txt"
+      ],
       "cwd": "${fileDirname}",
-      "preLaunchTask": "debug build"
+      "preLaunchTask": "debug build",
     },
-    // {
-    //   "name": "(lldb) launch current file",
-    //   "type": "lldb",
-    //   "request": "launch",
-    //   "program": "${fileDirname}/build/${fileBasenameNoExtension}.out",
-    //   "args": [],
-    //   "cwd": "${fileDirname}",
-    // },
     {
       "name": "debugpy",
       "type": "debugpy",
       "request": "launch",
       "program": "${file}",
-      "args": ["<", "in.txt"],
+      "args": [
+        "<",
+        "in.txt"
+      ],
       "cwd": "${fileDirname}",
     },
   ]
