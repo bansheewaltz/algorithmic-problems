@@ -95,10 +95,6 @@
         "test build",
         "test cpp"
       ],
-      "presentation": {
-        "reveal": "always",
-        "focus": true
-      }
     },
     {
       "type": "shell",
