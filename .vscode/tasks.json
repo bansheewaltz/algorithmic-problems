@@ -91,16 +91,9 @@
     {
       "type": "shell",
       "label": "build and test",
-      "command": "./test build/${fileBasenameNoExtension}.out",
-      "options": {
-        "cwd": "${fileDirname}"
-      },
-      "group": {
-        "kind": "test",
-        "isDefault": "**.cpp"
-      },
       "dependsOn": [
-        "test build"
+        "test build",
+        "test cpp"
       ],
       "presentation": {
         "reveal": "always",
@@ -110,7 +103,7 @@
     {
       "type": "shell",
       "label": "test cpp",
-      "command": "./test build/${fileBasenameNoExtension}.out",
+      "command": "${workspaceFolder}/test build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
       },
@@ -126,7 +119,7 @@
     {
       "type": "shell",
       "label": "test py",
-      "command": "./test ${fileBasename}",
+      "command": "chmod +x ${file} && ${workspaceFolder}/test ${fileBasename}",
       "options": {
         "cwd": "${fileDirname}"
       },
