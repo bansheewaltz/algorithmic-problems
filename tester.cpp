@@ -4,6 +4,13 @@
 #include <string_view>
 #include <iomanip>
 #include <sstream>
+#include <chrono>
+
+/* colors */
+#define BGG "\033[1;42m"
+#define BGR "\033[1;41m"
+#define COLRESET "\033[0m"
+#define FGGREY "\033[90m"
 
 using std::string;
 
@@ -77,6 +84,7 @@ int main(int argc, char *argv[]) {
   int last_test_pointer = 1;
   string line, line_next;
   std::stringstream buffer;
+  std::chrono::duration<double, std::milli> test_time{};
 
   std::getline(std::cin, line);
   while (!std::cin.eof()) {
@@ -91,7 +99,10 @@ int main(int argc, char *argv[]) {
       std::ofstream ofs{test_in};
       ofs << buffer.str();
       ofs.close();
+      auto t1 = std::chrono::high_resolution_clock::now();
       system(syscall.c_str());
+      auto t2 = std::chrono::high_resolution_clock::now();
+      test_time = t2 - t1;
       buffer.str("");
     }
     
@@ -108,9 +119,11 @@ int main(int argc, char *argv[]) {
       std::cerr << "res:\n" << std::quoted(keep_escapes(ans.str())) << '\n';
 #endif
       if (buffer.str() == ans.str())
-        cout << test_n << ".\033[1;42m PASS \033[0m" << std::endl;
+        cout << test_n << "." << BGG << " PASS " << COLRESET << " " 
+             << FGGREY << test_time.count() << "ms" << COLRESET << std::endl;
       else {
-        cout << test_n << ".\033[1;41m FAIL \033[0m";
+        cout << test_n << "." << BGR << " FAIL " << COLRESET << " " 
+             << FGGREY << test_time.count() << "ms" << COLRESET << std::endl;
         cout << "\t" << tests_path << ":" << last_test_pointer << std::endl;
         cout << "=======\n";
         cout << add_indentation(ans.str());
