@@ -21,5 +21,16 @@
       ],
       "cwd": "${fileDirname}",
     },
+    {
+      "name": "debug tester",
+      "type": "lldb",
+      "request": "launch",
+      "program": "dtest",
+      "args": [
+        "build/${fileBasenameNoExtension}.out"
+      ],
+      "cwd": "${fileDirname}",
+      "preLaunchTask": "debug build",
+    },
   ]
 }
