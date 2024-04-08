@@ -1,2 +1,5 @@
+WFLAGS := -Wall -Werror -Wextra -Wpedantic
 all:
-	g++ -O2 -Wall -Werror -Wextra -Wpedantic tester.cpp -o test
+	g++ -O2 $(WFLAGS) tester.cpp -o test
+debug:
+	g++ -g -DDEBUGGING $(WFLAGS) tester.cpp -o dtest
