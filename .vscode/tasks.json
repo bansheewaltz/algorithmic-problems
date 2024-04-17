@@ -74,7 +74,7 @@
     {
       "type": "shell",
       "label": "test build",
-      "command": "mkdir -p build && clang++ -g -Wall -Wextra -pedantic -fsanitize=address -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      "command": "mkdir -p build && clang++ -g -Wall -Wextra -pedantic -fsanitize=address -fsanitize=undefined -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
       },
