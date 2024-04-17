@@ -4,7 +4,7 @@ using namespace std;
 
 
 static void solve() {
-  constexpr int inf = INT_MAX, n_max = 100, K = 0, G = 1;
+  constexpr int inf = INT_MAX, K = 0, G = 1;
   const vector<int> dxK = { 1,  2, 2, 1, -1, -2, -2, -1},
                     dyK = {-2, -1, 1, 2,  2,  1, -1, -2},
                     dxG = { 1,  1, 1, 0, -1, -1, -1,  0},
@@ -27,8 +27,10 @@ static void solve() {
     return i >= 0 && i < n && j >= 0 && j < n; 
   };
 
-  vector<vector<vector<int>>> dp(n, vector<vector<int>>(n, vector<int>(2, inf)));
+  using vi = vector<int>;
+  vector<vector<vi>> dp(n, vector<vi>(n, vi(2, inf)));
   dp[x0][y0][K] = 0;
+  
   // <<steps, figure>, <x,y>>
   set<pair<pair<int, int>, pair<int,int>>> bfsq = {{{0, K}, {x0, y0}}};
   while (!bfsq.empty()) {
