@@ -8,6 +8,8 @@
   },
   "[cpp]": {
     "editor.formatOnSave": false,
+    "editor.formatOnPaste": false,
+    "editor.formatOnType": false,
   },
   "C_Cpp.default.cppStandard": "c++20",
   "python.analysis.typeCheckingMode": "basic",
