@@ -57,7 +57,7 @@
     {
       "type": "shell",
       "label": "debug build",
-      "command": "mkdir -p build && clang++ -DDEBUGGING -g -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      "command": "mkdir -p build && clang++ -DDEBUGGING -g -fsanitize=address -fsanitize=undefined -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
       },
