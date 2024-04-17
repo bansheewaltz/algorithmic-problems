@@ -31,8 +31,7 @@ static void solve() {
   vector<vector<vi>> dp(n, vector<vi>(n, vi(2, inf)));
   dp[x0][y0][K] = 0;
   
-  // {steps_count, figure, x, y}
-  set<array<int, 4>> bfsq = {{0, K, x0, y0}};
+  set<array<int, 4>> bfsq = {{0, K, x0, y0}}; // {steps_count, figure, x, y}
   while (!bfsq.empty()) {
     auto& pos = *begin(bfsq);
     auto f = pos[1];
