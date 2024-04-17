@@ -31,13 +31,14 @@ static void solve() {
   vector<vector<vi>> dp(n, vector<vi>(n, vi(2, inf)));
   dp[x0][y0][K] = 0;
   
-  // <<steps, figure>, <x,y>>
-  set<pair<pair<int, int>, pair<int,int>>> bfsq = {{{0, K}, {x0, y0}}};
+  // {steps_count, figure, x, y}
+  set<array<int, 4>> bfsq = {{0, K, x0, y0}};
   while (!bfsq.empty()) {
-    auto strategy = *begin(bfsq); bfsq.erase(begin(bfsq));
-    auto f = strategy.first.second;
-    auto x = strategy.second.first;
-    auto y = strategy.second.second;
+    auto& pos = *begin(bfsq);
+    auto f = pos[1];
+    auto x = pos[2];
+    auto y = pos[3];
+    bfsq.erase(begin(bfsq));
 
     for (size_t i = 0; i < 8; ++i) {
       int x1 = x, y1 = y;
@@ -54,9 +55,9 @@ static void solve() {
       if (board[x1][y1] == 'K')
         f1 = K;
       if (dp[x1][y1][f1] > dp[x][y][f] + 1) {
-        bfsq.erase({{dp[x1][y1][f1], f1}, {x1, y1}});
+        bfsq.erase({dp[x1][y1][f1], f1, x1, y1});
         dp[x1][y1][f1] = dp[x][y][f] + 1;
-        bfsq.insert({{dp[x1][y1][f1], f1}, {x1, y1}});
+        bfsq.insert({dp[x1][y1][f1], f1, x1, y1});
       }
     }
   }
