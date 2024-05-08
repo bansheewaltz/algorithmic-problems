@@ -129,6 +129,63 @@
         "focus": false
       }
     },
+    // golang
+    {
+      "type": "shell",
+      "label": "build and test go",
+      "dependsOn": [
+        "build go",
+        "test go"
+      ],
+      "dependsOrder": "sequence",
+    },
+    {
+      "type": "shell",
+      "label": "build go",
+      "command": "go1.19 build -o build/${fileBasenameNoExtension}.out ${fileBasename}",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": "**.go"
+      },
+      "presentation": {
+        "reveal": "silent",
+        "focus": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
+      "label": "test go",
+      "command": "${workspaceFolder}/test build/${fileBasenameNoExtension}.out",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": "**.go"
+      },
+      "presentation": {
+        "reveal": "always",
+        "focus": false
+      }
+    },
+    {
+      "type": "shell",
+      "label": "test suite",
+      "command": "bash ${fileDirname}/test.sh ${fileBasenameNoExtension}",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "presentation": {
+        "reveal": "always",
+      },
+      "dependsOn": [
+        "build go",
+      ],
+    },
   ],
   "version": "2.0.0"
 }
