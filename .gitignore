@@ -1,10 +1,12 @@
 build
 test
+tests
 dtest
 *.dSYM
 *.out
 */**/Makefile
 in.txt
 out.txt
+ref.txt
 
 .DS_Store
