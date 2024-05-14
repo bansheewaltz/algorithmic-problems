@@ -34,18 +34,20 @@ func main() {
 func solve() {
 	var n, m int
 	fmt.Fscanln(in, &n, &m)
-	d1 := min(n, m)
-	d2 := max(n, m)
-
-	const r = 10
-	rows := make([][r]int, d1*d2)
-	city := make([][][r]int, d2)
-	for i := 0; i < d2; i++ {
-		city[i] = rows[i*d1 : (i+1)*d1]
-	}
-
+	d1 := min(n, m) // horizontal
+	d2 := max(n, m) // vertical
 	var k int
 	fmt.Fscanln(in, &k)
+
+	elems := make([]int, d1*d2*k)
+	city := make([][][]int, d2)
+	for i := 0; i < d2; i++ {
+		city[i] = make([][]int, d1)
+		for j := 0; j < d1; j++ {
+			city[i][j] = elems[i*d1*k+j*k : i*d1*k+(j+1)*k]
+		}
+	}
+
 	for i := 0; i < k; i++ {
 		var count int
 		fmt.Fscanln(in, &count)

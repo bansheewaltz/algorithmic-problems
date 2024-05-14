@@ -37,11 +37,10 @@ func solve() {
 	d1 := min(n, m)
 	d2 := max(n, m)
 
-	const r = 10
-	rows := make([][r]int, d1*d2)
+	const r int = 10
 	city := make([][][r]int, d2)
-	for i := 0; i < d2; i++ {
-		city[i] = rows[i*d1 : (i+1)*d1]
+	for i := range city {
+		city[i] = make([][r]int, d1)
 	}
 
 	var k int
@@ -62,30 +61,37 @@ func solve() {
 
 	minArea := d1 * d2
 	for d1i := 0; d1i < d1; d1i++ {
-		d2r := make([]map[int]int, d2) // resources by row
+		d2r := make([]map[int]int, d2)
 		for d2i := 0; d2i < d2; d2i++ {
 			d2r[d2i] = make(map[int]int, k)
 		}
 		for d1j := d1i; d1j < d1; d1j++ {
-			wr := make(map[int]int, 0) // resources by rectange area
-			for d2i, d2j := 0, 0; d2j < d2; d2j++ {
+			for d2i := 0; d2i < d2; d2i++ {
 				for ki := 0; ki < k; ki++ {
-					if d2r[d2j][ki] > 0 || city[d2j][d1j][ki] > 0 {
-						d2r[d2j][ki] += city[d2j][d1j][ki]
+					if city[d2i][d1j][ki] > 0 {
+						d2r[d2i][ki] += city[d2i][d1j][ki]
+					}
+				}
+			}
+			d2i, d2j := 0, 0
+			wr := make(map[int]int, 0)
+			for d2j < d2 {
+				for ki := 0; ki < k; ki++ {
+					if d2r[d2j][ki] > 0 {
 						wr[ki] += d2r[d2j][ki]
 					}
 				}
-				for ; len(wr) == k && d2i < d2; d2i++ {
+				for len(wr) == k && d2i < d2 {
 					minArea = min(minArea, (d1j-d1i+1)*(d2j-d2i+1))
 					for ki := 0; ki < k; ki++ {
-						if d2r[d2i][ki] > 0 {
-							wr[ki] -= d2r[d2i][ki]
-							if wr[ki] == 0 {
-								delete(wr, ki)
-							}
+						wr[ki] -= d2r[d2i][ki]
+						if wr[ki] == 0 {
+							delete(wr, ki)
 						}
 					}
+					d2i++
 				}
+				d2j++
 			}
 		}
 	}
