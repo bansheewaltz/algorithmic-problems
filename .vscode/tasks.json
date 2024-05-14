@@ -20,7 +20,7 @@
     {
       "type": "shell",
       "label": "build",
-      "command": "mkdir -p build && clang++ -O2 -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
+      "command": "mkdir -p build && clang++ -Wall -Wextra -pedantic -fsanitize=address -fsanitize=undefined -std=c++20 ${fileBasename} -o build/${fileBasenameNoExtension}.out",
       "options": {
         "cwd": "${fileDirname}"
       },
